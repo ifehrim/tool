@@ -1,9 +1,9 @@
 #!/bin/bash
 # Short script to split videos by filesize using ffmpeg by LukeLR
-if [ $# -ne 2 ]; then
+if [[ $# -ne 2 ]]; then
     echo 'Illegal number of parameters. Needs 2 parameters:'
     echo 'Usage:'
-    echo './split-video.sh FILE SIZELIMIT'
+    echo './split-video.sh dinner-full.mp4 10000000'
     echo 
     echo 'Parameters:'
     echo '    - FILE:        Name of the video file to split'
@@ -36,10 +36,10 @@ NEXTFILENAME="$BASENAME-$i.$EXTENSION"
 echo "Duration of source video: $DURATION"
 
 # Until the duration of all partial videos has reached the duration of the source video
-while [[ $CUR_DURATION -lt $DURATION ]]; do
+while [[ ${CUR_DURATION} -lt ${DURATION} ]]; do
     # Encode next part
-    echo ffmpeg -i "$FILE" -ss "$CUR_DURATION" -fs "$SIZELIMIT" $FFMPEG_ARGS "$NEXTFILENAME"
-    ffmpeg -ss "$CUR_DURATION" -i "$FILE" -fs "$SIZELIMIT" $FFMPEG_ARGS "$NEXTFILENAME"
+    echo ffmpeg -i "$FILE" -ss "$CUR_DURATION" -fs "$SIZELIMIT" ${FFMPEG_ARGS} "$NEXTFILENAME"
+    ffmpeg -ss "$CUR_DURATION" -i "$FILE" -fs "$SIZELIMIT" ${FFMPEG_ARGS} "$NEXTFILENAME"
 
     # Duration of the new part
     NEW_DURATION=$(ffprobe -i "$NEXTFILENAME" -show_entries format=duration -v quiet -of default=noprint_wrappers=1:nokey=1|cut -d. -f1)
